@@ -1,6 +1,5 @@
 
 import java.util.*;
-import java.util.function.Function;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +12,10 @@ public class Main {
         map.put("three", 3);
         map.put("four", 4);
 
+        
+
         HashSet<Integer> set = new HashSet<>();
+        set.add(5);
         set.add(1);
         set.add(2);
         set.add(3);
@@ -23,62 +25,58 @@ public class Main {
             System.out.println(item);
         }
 
-        for (Map.Entry<String, Integer> item : map.entrySet()) {
-            System.out.println(item.getKey() + ": " + item.getValue());
-        }
+        // for (Map.Entry<String, Integer> item : map.entrySet()) {
+        //     System.out.println(item.getKey() + ": " + item.getValue());
+        // }
+        //System.exit(0); noob
 
         List<Integer> listarr = new ArrayList<>();
         List<Integer> numbers = new LinkedList<>();
-
-        double durationAddArrayList = timer((v) -> {
-            listarr.add(1);
-            return null;
-        });
-
-        double durationAddLinkedList = timer((v) -> {
-            numbers.add(1);
-            return null;
-        });
-
-        System.out.println("arrayList ile linkedList Fark: " + (durationAddArrayList - durationAddLinkedList) + " ms");
 
         for (int i = 2; i < 100; i++) {
             listarr.add(i);
             numbers.add(i);
         }
 
-        double durationGetArrayList = timer((v) -> {
+        int operations = 1_000_000;
+
+        double durationAddArrayList = timer(() -> {
+            listarr.add(10, 19);
+            listarr.remove(10);
+        }, operations);
+
+        double durationAddLinkedList = timer(() -> {
+            numbers.add(10, 19);
+            numbers.remove(10);
+        }, operations);
+
+        System.out.println("arraylist ekleme süresi: " + durationAddArrayList + " ms");
+        System.out.println("linkedlist ekleme süresi: " + durationAddLinkedList + " ms");
+        System.out.println("arrayList ile linkedList Fark: " + (durationAddArrayList - durationAddLinkedList) + " ms");
+
+        double durationGetArrayList = timer(() -> {
             listarr.get(30);
-            return null;
-        });
+        }, operations);
 
-        double durationGetLinkedList = timer((v) -> {
+        double durationGetLinkedList = timer(() -> {
             numbers.get(30);
-            return null;
-        });
+        }, operations);
 
+        System.out.println("arraylist get süresi: " + durationGetArrayList + " ms");
+        System.out.println("linkedlist get süresi: " + durationGetLinkedList + " ms");
         System.out.println("arrayList ile linkedList Fark: " + (durationGetArrayList - durationGetLinkedList) + " ms");
-       
-
     }
 
-    private static double timer(Function<Void, Object> function) {
-        //ArrayList ve LinkedList farklılıklarını göstermek için örnek bir kod yazalım.
-        
+    private static double timer(Runnable action, int iterations) {
         long startTime = System.nanoTime();
-        
-        for (int i = 0; i < 1000000; i++) {
-            Math.sqrt(i);
-            function.apply(null);
-            
+
+        for (int i = 0; i < iterations; i++) {
+            action.run();
         }
-        
+
         long endTime = System.nanoTime();
         long durationInNanoseconds = endTime - startTime;
-        
-        
-        double durationInMilliseconds = durationInNanoseconds / 1000000.0;
-        return durationInMilliseconds;
+        return durationInNanoseconds / 1_000_000.0;
     }
 }
 
