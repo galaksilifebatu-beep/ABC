@@ -28,7 +28,7 @@ public class Main {
         // for (Map.Entry<String, Integer> item : map.entrySet()) {
         //     System.out.println(item.getKey() + ": " + item.getValue());
         // }
-        //System.exit(0);
+        //System.exit(0); noob
 
         List<Integer> listarr = new ArrayList<>();
         List<Integer> numbers = new LinkedList<>();
